@@ -3,6 +3,7 @@
 #include "camera.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/gtc/type_ptr.hpp>
 
 Renderer::Renderer() {
 }
@@ -22,7 +23,8 @@ void Renderer::render(Camera& camera) {
     shader.use();
     
     // Set the view matrix from the camera
-    glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "view"), 1, GL_FALSE, camera.getViewMatrix().data());
+    glm::mat4 view = camera.getViewMatrix();
+    glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "view"), 1, GL_FALSE, glm::value_ptr(view));
     
     // Render the game world and objects here
 }

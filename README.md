@@ -39,6 +39,770 @@ To run this browser-based Minecraft clone on Ubuntu, you need:
 - **npm** (comes with Node.js)
 - **Git** (for version control)
 
+## Complete Setup Guide - Start to Finish
+
+This comprehensive guide walks you through setting up the Minecraft clone on a fresh Ubuntu installation.
+
+### Phase 1: System Preparation
+
+#### Step 1.1: Update System Packages
+```bash
+# Update package lists
+sudo apt update
+
+# Upgrade existing packages
+sudo apt upgrade -y
+
+# Install essential build tools (recommended)
+sudo apt install -y build-essential curl wget
+```
+
+**Verification:**
+```bash
+# Check Ubuntu version
+lsb_release -a
+# Should show Ubuntu 18.04 or higher
+```
+
+#### Step 1.2: Install Git
+```bash
+# Install Git
+sudo apt install -y git
+
+# Configure Git (replace with your details)
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+```
+
+**Verification:**
+```bash
+git --version
+# Should show: git version 2.x.x
+```
+
+### Phase 2: Install Node.js
+
+#### Step 2.1: Install Node.js via NodeSource Repository
+```bash
+# Download and run NodeSource setup script for Node.js 18.x LTS
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+
+# Install Node.js and npm
+sudo apt install -y nodejs
+```
+
+**Verification:**
+```bash
+# Check Node.js version
+node --version
+# Should show: v18.x.x or higher
+
+# Check npm version
+npm --version
+# Should show: 9.x.x or higher
+```
+
+#### Step 2.2: Alternative - Install via NVM (Node Version Manager)
+If you prefer more flexibility with Node versions:
+```bash
+# Install NVM
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
+# Reload shell configuration
+source ~/.bashrc
+
+# Install Node.js 18 LTS
+nvm install 18
+
+# Set default version
+nvm use 18
+nvm alias default 18
+```
+
+**Verification:**
+```bash
+nvm current
+# Should show: v18.x.x
+```
+
+### Phase 3: Clone and Setup Project
+
+#### Step 3.1: Create Project Directory
+```bash
+# Navigate to home directory
+cd ~
+
+# Create projects folder (optional but organized)
+mkdir -p ~/projects
+cd ~/projects
+```
+
+#### Step 3.2: Clone the Repository
+```bash
+# Clone from GitHub
+git clone https://github.com/omade88/minecraft-clone.git
+
+# Enter project directory
+cd minecraft-clone
+
+# Verify files are present
+ls -la
+```
+
+**Expected Output:**
+```
+.gitignore
+CMakeLists.txt
+package.json
+README.md
+server.js
+public/
+src/
+shaders/
+```
+
+#### Step 3.3: Install Project Dependencies
+```bash
+# Install npm packages
+npm install
+
+# This will create node_modules/ directory
+```
+
+**Verification:**
+```bash
+# Check if node_modules exists
+ls -ld node_modules
+# Should show the directory
+
+# Check installed packages
+npm list --depth=0
+# Should show: express@^4.18.2
+```
+
+### Phase 4: Configure Firewall
+
+#### Step 4.1: Check Firewall Status
+```bash
+# Check if UFW is active
+sudo ufw status
+```
+
+#### Step 4.2: Allow Port 3000
+```bash
+# Allow incoming connections on port 3000
+sudo ufw allow 3000/tcp
+
+# Reload firewall
+sudo ufw reload
+
+# Verify rule was added
+sudo ufw status numbered
+```
+
+**Expected Output:**
+```
+Status: active
+
+     To                         Action      From
+     --                         ------      ----
+[ 1] 3000/tcp                   ALLOW IN    Anywhere
+```
+
+### Phase 5: Get Server IP Address
+
+#### Step 5.1: Find Your IP Address
+```bash
+# Method 1: Using hostname
+hostname -I
+
+# Method 2: Using ip command
+ip addr show | grep "inet " | grep -v 127.0.0.1
+
+# Method 3: Using ifconfig (if installed)
+ifconfig | grep "inet " | grep -v 127.0.0.1
+```
+
+**Note the IP address** (e.g., 192.168.1.100) - you'll need this to access the game from other devices.
+
+#### Step 5.2: Test Network Connectivity
+```bash
+# Test if port 3000 is not already in use
+sudo lsof -i :3000
+# Should return nothing (port is free)
+
+# If port is in use, find and kill the process:
+# sudo kill -9 <PID>
+```
+
+### Phase 6: Start the Game Server
+
+#### Step 6.1: First Run
+```bash
+# Make sure you're in the project directory
+cd ~/projects/minecraft-clone
+
+# Start the server
+npm start
+```
+
+**Expected Output:**
+```
+========================================
+🎮 Minecraft Clone Server Started!
+========================================
+
+Local:    http://localhost:3000
+
+Network Access:
+          http://192.168.1.100:3000
+
+========================================
+📝 Share the Network URL with others
+   to play from different devices!
+========================================
+```
+
+**Keep this terminal open** - the server is now running!
+
+#### Step 6.2: Verify Server is Running
+Open a new terminal and run:
+```bash
+# Check if Node.js process is running
+ps aux | grep node
+
+# Test local connection
+curl http://localhost:3000
+# Should return HTML content
+```
+
+### Phase 7: Access and Test the Game
+
+#### Step 7.1: Test on Local Machine (Ubuntu)
+```bash
+# If Ubuntu has a GUI, open browser
+firefox http://localhost:3000
+# OR
+google-chrome http://localhost:3000
+# OR
+xdg-open http://localhost:3000
+```
+
+#### Step 7.2: Test from Another Device
+1. **Get your Ubuntu server IP** (from Step 5.1)
+2. **On another computer/phone**, open a web browser
+3. **Navigate to:** `http://<ubuntu-ip>:3000`
+   - Example: `http://192.168.1.100:3000`
+
+#### Step 7.3: Verify Game Functionality
+1. Click **"Click to Play"** button
+2. Mouse should lock to the game window
+3. Press **W** key - you should move forward
+4. Move mouse - camera should rotate
+5. **Left-click** on a block - it should disappear
+6. **Right-click** on a block - new block should appear
+7. Press **ESC** - mouse should unlock
+
+**If everything works, setup is complete! ✅**
+
+### Phase 8: Stopping the Server
+
+#### Step 8.1: Stop Foreground Server
+```bash
+# In the terminal where server is running, press:
+Ctrl + C
+
+# Verify server stopped
+curl http://localhost:3000
+# Should show: "Connection refused" or timeout
+```
+
+### Troubleshooting During Setup
+
+#### Issue: "Permission denied" during npm install
+```bash
+# Fix npm permissions
+mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+```
+
+#### Issue: "Cannot find module 'express'"
+```bash
+# Reinstall dependencies
+rm -rf node_modules package-lock.json
+npm install
+```
+
+#### Issue: "Address already in use" on port 3000
+```bash
+# Find process using port 3000
+sudo lsof -i :3000
+
+# Kill the process (replace <PID> with actual process ID)
+sudo kill -9 <PID>
+
+# Or use a different port
+PORT=8080 npm start
+```
+
+#### Issue: Can't access from other devices
+```bash
+# Check firewall
+sudo ufw status
+
+# Ensure both devices are on same network
+# Verify server IP
+hostname -I
+
+# Test connectivity from other device
+# On the other device, run: ping <ubuntu-ip>
+```
+
+---
+
+## Automation Guide
+
+Once you've verified the manual setup works, you can automate the server to run on boot and restart automatically.
+
+### Automation Method 1: Using systemd (Recommended)
+
+#### Step A1: Create systemd Service File
+```bash
+# Create service file
+sudo nano /etc/systemd/system/minecraft-clone.service
+```
+
+**Add this content:**
+```ini
+[Unit]
+Description=Minecraft Clone Browser Game
+After=network.target
+
+[Service]
+Type=simple
+User=YOUR_USERNAME
+WorkingDirectory=/home/YOUR_USERNAME/projects/minecraft-clone
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=minecraft-clone
+Environment=NODE_ENV=production
+Environment=PORT=3000
+
+[Install]
+WantedBy=multi-user.target
+```
+
+**Replace:**
+- `YOUR_USERNAME` with your actual Ubuntu username (run `whoami` to see it)
+- Adjust `WorkingDirectory` path if you installed elsewhere
+
+**Save and exit** (Ctrl+O, Enter, Ctrl+X)
+
+#### Step A2: Enable and Start Service
+```bash
+# Reload systemd to recognize new service
+sudo systemctl daemon-reload
+
+# Enable service to start on boot
+sudo systemctl enable minecraft-clone
+
+# Start the service now
+sudo systemctl start minecraft-clone
+
+# Check service status
+sudo systemctl status minecraft-clone
+```
+
+**Expected Output:**
+```
+● minecraft-clone.service - Minecraft Clone Browser Game
+   Loaded: loaded (/etc/systemd/system/minecraft-clone.service; enabled)
+   Active: active (running) since ...
+```
+
+#### Step A3: Manage the Service
+```bash
+# Check status
+sudo systemctl status minecraft-clone
+
+# Stop service
+sudo systemctl stop minecraft-clone
+
+# Restart service
+sudo systemctl restart minecraft-clone
+
+# View logs
+sudo journalctl -u minecraft-clone -f
+
+# Disable auto-start on boot
+sudo systemctl disable minecraft-clone
+```
+
+### Automation Method 2: Using PM2 (Process Manager)
+
+#### Step B1: Install PM2 Globally
+```bash
+# Install PM2
+sudo npm install -g pm2
+
+# Verify installation
+pm2 --version
+```
+
+#### Step B2: Start Application with PM2
+```bash
+# Navigate to project directory
+cd ~/projects/minecraft-clone
+
+# Start with PM2
+pm2 start server.js --name minecraft-clone
+
+# View status
+pm2 status
+```
+
+**Expected Output:**
+```
+┌─────┬────────────────────┬─────────┬─────────┬──────────┐
+│ id  │ name               │ mode    │ ↺       │ status   │
+├─────┼────────────────────┼─────────┼─────────┼──────────┤
+│ 0   │ minecraft-clone    │ fork    │ 0       │ online   │
+└─────┴────────────────────┴─────────┴─────────┴──────────┘
+```
+
+#### Step B3: Configure Auto-Start on Boot
+```bash
+# Save current PM2 process list
+pm2 save
+
+# Generate startup script
+pm2 startup
+
+# Copy and run the command it outputs
+# Example: sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u username --hp /home/username
+```
+
+#### Step B4: Manage with PM2
+```bash
+# View all processes
+pm2 list
+
+# Monitor in real-time
+pm2 monit
+
+# View logs
+pm2 logs minecraft-clone
+
+# Restart
+pm2 restart minecraft-clone
+
+# Stop
+pm2 stop minecraft-clone
+
+# Remove from PM2
+pm2 delete minecraft-clone
+```
+
+### Automation Method 3: Using Screen (Simple Background Process)
+
+#### Step C1: Install Screen
+```bash
+# Install screen if not present
+sudo apt install -y screen
+```
+
+#### Step C2: Run in Screen Session
+```bash
+# Create new screen session
+screen -S minecraft
+
+# Navigate to project and start server
+cd ~/projects/minecraft-clone
+npm start
+
+# Detach from screen: Press Ctrl+A then D
+
+# Reattach to screen
+screen -r minecraft
+
+# List all screen sessions
+screen -ls
+```
+
+#### Step C3: Auto-Start with Crontab
+```bash
+# Edit crontab
+crontab -e
+
+# Add this line to start on reboot
+@reboot cd /home/YOUR_USERNAME/projects/minecraft-clone && screen -dmS minecraft npm start
+
+# Save and exit
+```
+
+### Automated Deployment Script
+
+Create a complete automation script for fresh installations:
+
+#### Create deployment script:
+```bash
+# Create script file
+nano ~/deploy-minecraft.sh
+```
+
+**Add this content:**
+```bash
+#!/bin/bash
+
+set -e  # Exit on error
+
+echo "========================================="
+echo "Minecraft Clone - Automated Deployment"
+echo "========================================="
+
+# Variables
+PROJECT_DIR="$HOME/projects/minecraft-clone"
+SERVICE_NAME="minecraft-clone"
+
+# Update system
+echo "Step 1: Updating system..."
+sudo apt update && sudo apt upgrade -y
+
+# Install Node.js
+echo "Step 2: Installing Node.js..."
+if ! command -v node &> /dev/null; then
+    curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+    sudo apt install -y nodejs
+fi
+
+echo "Node version: $(node --version)"
+echo "npm version: $(npm --version)"
+
+# Install Git
+echo "Step 3: Installing Git..."
+sudo apt install -y git
+
+# Clone repository
+echo "Step 4: Cloning repository..."
+mkdir -p ~/projects
+cd ~/projects
+if [ -d "$PROJECT_DIR" ]; then
+    echo "Project already exists. Pulling latest changes..."
+    cd "$PROJECT_DIR"
+    git pull
+else
+    git clone https://github.com/omade88/minecraft-clone.git
+    cd minecraft-clone
+fi
+
+# Install dependencies
+echo "Step 5: Installing npm dependencies..."
+npm install
+
+# Configure firewall
+echo "Step 6: Configuring firewall..."
+sudo ufw allow 3000/tcp
+sudo ufw reload || true
+
+# Create systemd service
+echo "Step 7: Creating systemd service..."
+sudo bash -c "cat > /etc/systemd/system/$SERVICE_NAME.service" << EOF
+[Unit]
+Description=Minecraft Clone Browser Game
+After=network.target
+
+[Service]
+Type=simple
+User=$USER
+WorkingDirectory=$PROJECT_DIR
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=$SERVICE_NAME
+Environment=NODE_ENV=production
+Environment=PORT=3000
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable and start service
+echo "Step 8: Starting service..."
+sudo systemctl daemon-reload
+sudo systemctl enable $SERVICE_NAME
+sudo systemctl restart $SERVICE_NAME
+
+# Get IP address
+IP_ADDR=$(hostname -I | awk '{print $1}')
+
+echo ""
+echo "========================================="
+echo "✅ Deployment Complete!"
+echo "========================================="
+echo ""
+echo "Server is running at:"
+echo "  Local:   http://localhost:3000"
+echo "  Network: http://$IP_ADDR:3000"
+echo ""
+echo "Service management:"
+echo "  Status:  sudo systemctl status $SERVICE_NAME"
+echo "  Logs:    sudo journalctl -u $SERVICE_NAME -f"
+echo "  Restart: sudo systemctl restart $SERVICE_NAME"
+echo ""
+echo "========================================="
+```
+
+**Make executable and run:**
+```bash
+# Make script executable
+chmod +x ~/deploy-minecraft.sh
+
+# Run deployment script
+~/deploy-minecraft.sh
+```
+
+### Automated Updates Script
+
+Create a script to update the game:
+
+```bash
+# Create update script
+nano ~/update-minecraft.sh
+```
+
+**Add this content:**
+```bash
+#!/bin/bash
+
+set -e
+
+echo "Updating Minecraft Clone..."
+
+cd ~/projects/minecraft-clone
+
+# Stop service
+sudo systemctl stop minecraft-clone
+
+# Pull latest changes
+git pull
+
+# Install/update dependencies
+npm install
+
+# Restart service
+sudo systemctl start minecraft-clone
+
+echo "✅ Update complete!"
+sudo systemctl status minecraft-clone
+```
+
+**Make executable:**
+```bash
+chmod +x ~/update-minecraft.sh
+```
+
+### Monitoring and Logs
+
+#### View Real-time Logs
+```bash
+# Using systemd
+sudo journalctl -u minecraft-clone -f
+
+# Using PM2
+pm2 logs minecraft-clone --lines 100
+```
+
+#### Check Server Health
+```bash
+# Create health check script
+cat > ~/check-minecraft.sh << 'EOF'
+#!/bin/bash
+RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000)
+if [ $RESPONSE -eq 200 ]; then
+    echo "✅ Server is running"
+else
+    echo "❌ Server is down (HTTP $RESPONSE)"
+fi
+EOF
+
+chmod +x ~/check-minecraft.sh
+./check-minecraft.sh
+```
+
+### Backup Script
+
+Automate backups:
+```bash
+# Create backup script
+nano ~/backup-minecraft.sh
+```
+
+**Add this content:**
+```bash
+#!/bin/bash
+
+BACKUP_DIR="$HOME/minecraft-backups"
+PROJECT_DIR="$HOME/projects/minecraft-clone"
+DATE=$(date +%Y%m%d_%H%M%S)
+
+mkdir -p "$BACKUP_DIR"
+
+tar -czf "$BACKUP_DIR/minecraft-clone-$DATE.tar.gz" \
+    -C "$PROJECT_DIR" \
+    --exclude='node_modules' \
+    --exclude='build' \
+    .
+
+echo "✅ Backup created: $BACKUP_DIR/minecraft-clone-$DATE.tar.gz"
+
+# Keep only last 5 backups
+cd "$BACKUP_DIR"
+ls -t minecraft-clone-*.tar.gz | tail -n +6 | xargs -r rm
+
+echo "✅ Old backups cleaned"
+```
+
+**Make executable and schedule:**
+```bash
+chmod +x ~/backup-minecraft.sh
+
+# Add to crontab for daily backups at 2 AM
+crontab -e
+# Add: 0 2 * * * /home/YOUR_USERNAME/backup-minecraft.sh
+```
+
+---
+
+## Quick Reference Commands
+
+### Essential Commands
+```bash
+# Start server manually
+npm start
+
+# Start server (systemd)
+sudo systemctl start minecraft-clone
+
+# Stop server (systemd)
+sudo systemctl stop minecraft-clone
+
+# View logs
+sudo journalctl -u minecraft-clone -f
+
+# Check server status
+sudo systemctl status minecraft-clone
+
+# Restart after changes
+sudo systemctl restart minecraft-clone
+```
+
 ## Step-by-Step Setup Instructions
 
 ### Step 1: Update Your System

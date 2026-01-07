@@ -1,0 +1,151 @@
+# Build directories
+build/
+out/
+cmake-build-*/
+bin/
+lib/
+
+# Compiled Object files
+*.o
+*.obj
+*.ko
+*.elf
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.a
+*.lib
+*.lai
+*.la
+
+# Executables
+*.exe
+*.out
+*.app
+minecraft-clone
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+*.cmake
+
+# IDE - VSCode
+.vscode/
+*.code-workspace
+
+# IDE - CLion
+.idea/
+cmake-build-*/
+
+# IDE - Visual Studio
+.vs/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# IDE - Code::Blocks
+*.layout
+*.depend
+
+# OS - macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# OS - Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# OS - Linux
+*~
+.directory
+.Trash-*
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# Temporary files
+*.swp
+*.swo
+*~
+*.tmp
+*.temp
+*.bak
+*.cache
+
+# Core dumps
+core
+core.*
+
+# Debug files
+*.dSYM/
+*.su
+
+# Package managers
+conan.lock
+vcpkg_installed/
+
+# User-specific files
+*.user
+*.userprefs
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# Profiling
+*.prof
+*.gcov
+*.gcda
+*.gcno
+
+# Dependency directories (if using package managers)
+dependencies/
+external/
+third_party/
+
+# Generated documentation
+docs/_build/
+docs/html/
+docs/latex/
+
+# Asset files (uncomment if you don't want to track large binary assets)
+# assets/textures/*.png
+# assets/textures/*.jpg
+# assets/models/*.obj
+# assets/sounds/*.wav
+# assets/sounds/*.mp3

@@ -156,6 +156,40 @@ Or from the project root directory:
 
 ### Common Issues and Solutions
 
+#### Issue: "Failed to initialize GLFW!"
+**Solution:** This typically occurs when running on a headless server or over SSH without X11 forwarding.
+
+**Option 1: Enable X11 Forwarding (if using SSH)**
+```bash
+# On your local machine, connect with X11 forwarding
+ssh -X user@server
+
+# Then run the game
+./minecraft-clone
+```
+
+**Option 2: Install and use Xvfb (virtual framebuffer)**
+```bash
+# Install Xvfb
+sudo apt install xvfb
+
+# Run the game with virtual display
+xvfb-run -a ./minecraft-clone
+```
+
+**Option 3: Run on a system with a GUI**
+- This game requires a graphical environment (X11, Wayland, etc.)
+- Ensure you're running on Ubuntu Desktop, not Server
+- Make sure you're not in a headless/remote environment without display capabilities
+
+**Option 4: Check display environment variable**
+```bash
+echo $DISPLAY
+# Should show something like ":0" or ":1"
+# If empty, set it:
+export DISPLAY=:0
+```
+
 #### Issue: "CMake not found"
 **Solution:** Install CMake using `sudo apt install cmake`
 

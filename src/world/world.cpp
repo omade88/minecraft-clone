@@ -1,20 +1,6 @@
 #include "world.h"
 #include "chunk.h"
 #include "block.h"
-#include <vector>
-
-class World {
-public:
-    World();
-    ~World();
-    
-    void load();
-    void update();
-    
-private:
-    std::vector<Chunk> chunks;
-    void generateChunks();
-}; 
 
 World::World() {
     generateChunks();

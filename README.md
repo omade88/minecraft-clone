@@ -34,8 +34,14 @@ The project is organized into the following directories and files:
 
 To run this browser-based Minecraft clone on Ubuntu, you need:
 
+### System Requirements
+- **Ubuntu 20.04 or higher** (for Node.js 20.x support)
+  - Ubuntu 18.04 users: See alternative instructions below
+- **2GB RAM minimum** (4GB recommended)
+- **Network connection**
+
 ### Required Software
-- **Node.js** (version 14.0 or higher)
+- **Node.js** (version 16.0 or higher)
 - **npm** (comes with Node.js)
 - **Git** (for version control)
 
@@ -82,7 +88,13 @@ git --version
 
 ### Phase 2: Install Node.js
 
+**⚠️ Important: Ubuntu Version Compatibility**
+- **Ubuntu 20.04+**: Use Node.js 20.x (recommended)
+- **Ubuntu 18.04**: Use Node.js 18.x (still maintained) or upgrade Ubuntu
+
 #### Step 2.1: Install Node.js via NodeSource Repository
+
+**For Ubuntu 20.04, 22.04, or higher:**
 ```bash
 # Download and run NodeSource setup script for Node.js 20.x LTS
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
@@ -91,18 +103,45 @@ curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 sudo apt install -y nodejs
 ```
 
+**For Ubuntu 18.04 (Bionic):**
+```bash
+# Node.js 20.x requires Ubuntu 20.04+
+# Use Node.js 18.x instead (still receiving security updates)
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+
+# Install Node.js and npm
+sudo apt install -y nodejs
+
+# If you get a libc6 dependency error, Node.js 18.x may not be compatible
+# In that case, either upgrade Ubuntu or use NVM (see Step 2.3)
+```
+
 **Verification:**
 ```bash
 # Check Node.js version
 node --version
-# Should show: v20.x.x or higher
+# Ubuntu 20.04+: Should show v20.x.x or higher
+# Ubuntu 18.04: Should show v18.x.x or higher
 
 # Check npm version
 npm --version
-# Should show: 10.x.x or higher
+# Should show: 8.x.x or higher
 ```
 
-#### Step 2.2: Alternative - Install via NVM (Node Version Manager)
+#### Step 2.2: Alternative - Upgrade Ubuntu (Recommended for Ubuntu 18.04 users)
+For the best experience with Node.js 20.x:
+```bash
+# Check current Ubuntu version
+lsb_release -a
+
+# Upgrade to Ubuntu 20.04 or 22.04
+# WARNING: This is a major system upgrade. Backup your data first!
+sudo do-release-upgrade
+
+# After upgrade, follow the Node.js 20.x instructions above
+```
+
+#### Step 2.3: Alternative - Install via NVM (Node Version Manager)
 If you prefer more flexibility with Node versions:
 ```bash
 # Install NVM
@@ -318,6 +357,51 @@ curl http://localhost:3000
 ```
 
 ### Troubleshooting During Setup
+
+#### Issue: "nodejs : Depends: libc6 (>= 2.28)" error on Ubuntu 18.04
+**Error Message:**
+```
+The following packages have unmet dependencies:
+ nodejs : Depends: libc6 (>= 2.28) but 2.27-3ubuntu1.6 is to be installed
+```
+
+**Solution:** Node.js 20.x requires Ubuntu 20.04 or higher. Choose one option:
+
+**Option 1: Try Node.js 18.x (Quick Fix - Still Maintained)**
+```bash
+# Remove Node.js 20.x repository
+sudo rm -f /etc/apt/sources.list.d/nodesource.list
+sudo apt update
+
+# Try Node.js 18.x (still receives security updates)
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# Verify installation
+node --version  # Should show v18.x.x
+
+# If this also fails with libc6 error, proceed to Option 2 or 3
+```
+
+**Option 2: Upgrade Ubuntu (Recommended for Production)**
+```bash
+# Backup your data first!
+# Upgrade to Ubuntu 20.04 LTS or 22.04 LTS
+sudo do-release-upgrade
+
+# After upgrade, retry Node.js 20.x installation
+```
+
+**Option 3: Use NVM (Most Flexible)**
+```bash
+# Install NVM
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+source ~/.bashrc
+
+# NVM will compile Node.js to work on your system
+nvm install 18  # Try 18 first (maintained)
+nvm install 20  # Or try 20 (may work via NVM even on Ubuntu 18.04)
+```
 
 #### Issue: "Permission denied" during npm install
 ```bash
@@ -576,7 +660,15 @@ sudo apt update && sudo apt upgrade -y
 # Install Node.js
 echo "Step 2: Installing Node.js..."
 if ! command -v node &> /dev/null; then
-    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+    # Detect Ubuntu version
+    UBUNTU_VERSION=$(lsb_release -rs)
+    if (( $(echo "$UBUNTU_VERSION >= 20.04" | bc -l) )); then
+        echo "Ubuntu $UBUNTU_VERSION detected - Installing Node.js 20.x"
+        curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+    else
+        echo "Ubuntu $UBUNTU_VERSION detected - Installing Node.js 18.x (compatible version)"
+        curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+    fi
     sudo apt install -y nodejs
 fi
 
@@ -813,10 +905,24 @@ sudo apt upgrade -y
 ```
 
 ### Step 2: Install Node.js and npm
-Install Node.js (version 14 or higher):
+Install Node.js (version 16 or higher):
+
+**Check your Ubuntu version first:**
+```bash
+lsb_release -a
+```
+
+**For Ubuntu 20.04 or higher:**
 ```bash
 # Install Node.js 20.x (LTS)
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+**For Ubuntu 18.04:**
+```bash
+# Install Node.js 18.x (still maintained, compatible with Ubuntu 18.04)
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 sudo apt install -y nodejs
 
 # Verify installation

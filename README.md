@@ -84,8 +84,8 @@ git --version
 
 #### Step 2.1: Install Node.js via NodeSource Repository
 ```bash
-# Download and run NodeSource setup script for Node.js 18.x LTS
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+# Download and run NodeSource setup script for Node.js 20.x LTS
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 
 # Install Node.js and npm
 sudo apt install -y nodejs
@@ -95,11 +95,11 @@ sudo apt install -y nodejs
 ```bash
 # Check Node.js version
 node --version
-# Should show: v18.x.x or higher
+# Should show: v20.x.x or higher
 
 # Check npm version
 npm --version
-# Should show: 9.x.x or higher
+# Should show: 10.x.x or higher
 ```
 
 #### Step 2.2: Alternative - Install via NVM (Node Version Manager)
@@ -111,18 +111,18 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 # Reload shell configuration
 source ~/.bashrc
 
-# Install Node.js 18 LTS
-nvm install 18
+# Install Node.js 20 LTS
+nvm install 20
 
 # Set default version
-nvm use 18
-nvm alias default 18
+nvm use 20
+nvm alias default 20
 ```
 
 **Verification:**
 ```bash
 nvm current
-# Should show: v18.x.x
+# Should show: v20.x.x
 ```
 
 ### Phase 3: Clone and Setup Project
@@ -576,7 +576,7 @@ sudo apt update && sudo apt upgrade -y
 # Install Node.js
 echo "Step 2: Installing Node.js..."
 if ! command -v node &> /dev/null; then
-    curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
     sudo apt install -y nodejs
 fi
 
@@ -815,8 +815,8 @@ sudo apt upgrade -y
 ### Step 2: Install Node.js and npm
 Install Node.js (version 14 or higher):
 ```bash
-# Install Node.js 18.x (LTS)
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+# Install Node.js 20.x (LTS)
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 sudo apt install -y nodejs
 
 # Verify installation
@@ -831,8 +831,8 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
 source ~/.bashrc
 
 # Install Node.js
-nvm install 18
-nvm use 18
+nvm install 20
+nvm use 20
 ```
 
 ### Step 3: Clone the Repository

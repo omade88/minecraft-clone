@@ -1,267 +1,392 @@
-# Minecraft Clone
+# Minecraft Clone - Browser Edition
 
 ## Overview
-This project is a local Minecraft-like game designed to run on Ubuntu. It features a voxel-based world where players can explore, build, and interact with various elements.
+This is a browser-based Minecraft-like game built with Three.js and WebGL. The game runs on an Ubuntu server and can be accessed from any web browser via IP address. Players can explore a procedurally generated voxel world, break and place blocks, and enjoy a 3D gaming experience directly in their browser.
+
+## Features
+- 🎮 **Browser-based gameplay** - No installation required, play directly in your browser
+- 🌍 **Procedurally generated terrain** - Dynamic world generation with varied heights
+- 🧱 **Block building mechanics** - Break and place blocks like classic Minecraft
+- 🎯 **First-person controls** - WASD movement with mouse look
+- 📊 **Real-time HUD** - FPS counter, position tracker, and block count
+- 🌐 **Network accessible** - Play from any device on your network
 
 ## Project Structure
-The project is organized into several directories and files:
+The project is organized into the following directories and files:
 
-- **src/**: Contains the source code for the game.
-  - **main.cpp**: Entry point of the game.
-  - **engine/**: Contains the game engine components.
-    - **renderer.cpp**: Implementation of the rendering engine.
-    - **renderer.h**: Header file for the rendering engine.
-    - **camera.cpp**: Implementation of the camera system.
-    - **camera.h**: Header file for the camera system.
-    - **shader.cpp**: Implementation of the shader management.
-    - **shader.h**: Header file for shader management.
-  - **world/**: Contains the world generation and management code.
-    - **chunk.cpp**: Implementation of the chunk system.
-    - **chunk.h**: Header file for the chunk system.
-    - **block.cpp**: Implementation of individual blocks.
-    - **block.h**: Header file for block management.
-    - **world.cpp**: Implementation of the overall world management.
-    - **world.h**: Header file for world management.
-  - **player/**: Contains player-related code.
-    - **player.cpp**: Implementation of player controls and movement.
-    - **player.h**: Header file for player management.
-  - **utils/**: Contains utility functions.
-    - **noise.cpp**: Implementation of noise generation for terrain.
-    - **noise.h**: Header file for noise generation functions.
+- **public/**: Client-side web application
+  - **index.html**: Main game interface with HUD and controls
+  - **js/game.js**: Three.js game logic, rendering, and player controls
   
-- **shaders/**: Contains shader files for rendering.
-  - **vertex.glsl**: Vertex shader code.
-  - **fragment.glsl**: Fragment shader code.
+- **server.js**: Node.js/Express server to host the game
 
-- **assets/**: Contains game assets such as textures.
-  - **textures/**: Directory for texture files.
+- **package.json**: Node.js dependencies and scripts
 
-- **CMakeLists.txt**: Configuration file for building the project with CMake.
+- **src/**: Legacy C++ implementation (not used for browser version)
 
-- **README.md**: Documentation for the project.
+- **CMakeLists.txt**: Build configuration (legacy, not used for browser version)
+
+- **.gitignore**: Git ignore rules
+
+- **README.md**: This documentation file
 
 ## Prerequisites
 
-Before building and running this Minecraft clone, ensure you have the following dependencies installed on your Ubuntu system:
+To run this browser-based Minecraft clone on Ubuntu, you need:
 
-### Required Dependencies
-- **GCC/G++** (version 7.0 or higher)
-- **CMake** (version 3.10 or higher)
-- **OpenGL** development libraries
-- **GLFW3** (for window management and input)
-- **GLEW** (OpenGL Extension Wrangler Library)
-- **GLM** (OpenGL Mathematics library)
+### Required Software
+- **Node.js** (version 14.0 or higher)
+- **npm** (comes with Node.js)
 - **Git** (for version control)
 
 ## Step-by-Step Setup Instructions
 
 ### Step 1: Update Your System
-First, update your package lists to ensure you get the latest versions:
+First, update your package lists:
 ```bash
 sudo apt update
 sudo apt upgrade -y
 ```
 
-### Step 2: Install Build Tools
-Install the essential build tools (GCC, G++, Make, CMake):
+### Step 2: Install Node.js and npm
+Install Node.js (version 14 or higher):
 ```bash
-sudo apt install -y build-essential cmake git
+# Install Node.js 18.x (LTS)
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# Verify installation
+node --version
+npm --version
 ```
 
-### Step 3: Install OpenGL and Graphics Libraries
-Install the required OpenGL and graphics development libraries:
+Alternative method using nvm (Node Version Manager):
 ```bash
-sudo apt install -y libgl1-mesa-dev libglu1-mesa-dev
+# Install nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+source ~/.bashrc
+
+# Install Node.js
+nvm install 18
+nvm use 18
 ```
 
-### Step 4: Install GLFW3
-Install GLFW3 for window creation and input handling:
+### Step 3: Clone the Repository
+Clone this repository to your Ubuntu machine:
 ```bash
-sudo apt install -y libglfw3-dev
-```
-
-### Step 5: Install GLEW
-Install GLEW for managing OpenGL extensions:
-```bash
-sudo apt install -y libglew-dev
-```
-
-### Step 6: Install GLM
-Install GLM for mathematics operations:
-```bash
-sudo apt install -y libglm-dev
-```
-
-### Step 7: Verify Installation
-Verify that all tools are properly installed:
-```bash
-gcc --version
-g++ --version
-cmake --version
-pkg-config --modversion glfw3
-```
-
-### Step 8: Clone the Repository
-Clone this repository to your local machine:
-```bash
-git clone <repository-url>
+git clone https://github.com/omade88/minecraft-clone.git
 cd minecraft-clone
 ```
 
-### Step 9: Create Build Directory
-Create a separate directory for building the project (out-of-source build):
+### Step 4: Install Dependencies
+Install the required npm packages:
 ```bash
-mkdir build
-cd build
+npm install
 ```
 
-### Step 10: Configure with CMake
-Run CMake to configure the project and generate build files:
+This will install:
+- **Express**: Web server framework
+- **Nodemon**: Auto-restart server during development (optional)
+
+### Step 5: Start the Server
+Run the game server:
 ```bash
-cmake ..
+npm start
 ```
 
-If you encounter any errors, make sure all dependencies are properly installed. You can specify a build type for optimization:
-```bash
-# For debug build (with debugging symbols)
-cmake -DCMAKE_BUILD_TYPE=Debug ..
+The server will display output like:
+```
+========================================
+🎮 Minecraft Clone Server Started!
+========================================
 
-# For release build (optimized)
-cmake -DCMAKE_BUILD_TYPE=Release ..
+Local:    http://localhost:3000
+
+Network Access:
+          http://192.168.1.100:3000
+
+========================================
+📝 Share the Network URL with others
+   to play from different devices!
+========================================
 ```
 
-### Step 11: Build the Project
-Compile the project using make:
+### Step 6: Access the Game
+Open a web browser and navigate to one of the URLs shown:
+
+**On the same Ubuntu machine:**
+- Visit `http://localhost:3000`
+
+**From another device on the same network:**
+- Visit `http://<your-ubuntu-ip>:3000`
+- Replace `<your-ubuntu-ip>` with the IP shown in the server output
+
+### Step 7: Find Your Server IP (if needed)
+If you need to find your Ubuntu server's IP address:
 ```bash
-make
+# Show all network interfaces
+ip addr show
+
+# Or use hostname command
+hostname -I
+
+# Or use ifconfig (if installed)
+ifconfig
 ```
 
-For faster compilation on multi-core systems, use parallel jobs:
+Look for the IP address under your active network interface (usually `eth0` for Ethernet or `wlan0` for WiFi).
+
+### Step 8: Configure Firewall (if needed)
+If you can't access the game from other devices, you may need to allow traffic on port 3000:
 ```bash
-make -j$(nproc)
+# For ufw firewall
+sudo ufw allow 3000/tcp
+sudo ufw status
+
+# For iptables
+sudo iptables -A INPUT -p tcp --dport 3000 -j ACCEPT
 ```
 
-### Step 12: Run the Game
-Once the build is complete, run the executable:
+### Step 9: Start Playing!
+1. Click **"Click to Play"** button
+2. The mouse will lock to the game window
+3. Use the controls to move around and build
+
+## Running the Game
+
+### Game Controls
+- **W/A/S/D**: Move forward/left/backward/right
+- **Space**: Jump
+- **Mouse**: Look around (after clicking "Click to Play")
+- **Left Click**: Break block (remove)
+- **Right Click**: Place block
+- **ESC**: Unlock mouse pointer
+
+### Starting the Server
+
+**Production Mode:**
 ```bash
-./minecraft-clone
+npm start
 ```
 
-Or from the project root directory:
+**Development Mode (auto-restart on code changes):**
 ```bash
-./build/minecraft-clone
+npm run dev
 ```
+
+**Custom Port:**
+```bash
+PORT=8080 npm start
+```
+
+### Accessing from Different Devices
+
+**Same Computer:**
+- `http://localhost:3000`
+
+**Other Computers/Phones on Same WiFi:**
+- `http://<ubuntu-server-ip>:3000`
+
+**Over the Internet (requires port forwarding):**
+- Configure your router to forward port 3000 to your Ubuntu machine
+- Access via `http://<your-public-ip>:3000`
+
+### Performance Tips
+- Use a modern browser (Chrome, Firefox, Edge)
+- Ensure hardware acceleration is enabled in browser settings
+- Close other tabs to free up GPU resources
+- Lower quality settings if experiencing lag
 
 ## Troubleshooting
 
 ### Common Issues and Solutions
 
-#### Issue: "Failed to initialize GLFW!"
-**Solution:** This typically occurs when running on a headless server or over SSH without X11 forwarding.
-
-**Option 1: Enable X11 Forwarding (if using SSH)**
+#### Issue: "Cannot GET /" or blank page
+**Solution:** Ensure the server is running and you're using the correct URL
 ```bash
-# On your local machine, connect with X11 forwarding
-ssh -X user@server
+# Check if server is running
+ps aux | grep node
 
-# Then run the game
-./minecraft-clone
+# Restart the server
+npm start
 ```
 
-**Option 2: Install and use Xvfb (virtual framebuffer)**
-```bash
-# Install Xvfb
-sudo apt install xvfb
-
-# Run the game with virtual display
-xvfb-run -a ./minecraft-clone
-```
-
-**Option 3: Run on a system with a GUI**
-- This game requires a graphical environment (X11, Wayland, etc.)
-- Ensure you're running on Ubuntu Desktop, not Server
-- Make sure you're not in a headless/remote environment without display capabilities
-
-**Option 4: Check display environment variable**
-```bash
-echo $DISPLAY
-# Should show something like ":0" or ":1"
-# If empty, set it:
-export DISPLAY=:0
-```
-
-#### Issue: "CMake not found"
-**Solution:** Install CMake using `sudo apt install cmake`
-
-#### Issue: "GLFW3 not found"
-**Solution:** Ensure GLFW3 is installed: `sudo apt install libglfw3-dev`
-
-#### Issue: "OpenGL headers not found"
-**Solution:** Install Mesa development libraries: `sudo apt install libgl1-mesa-dev libglu1-mesa-dev`
-
-#### Issue: "Permission denied" when running the executable
-**Solution:** Make the file executable: `chmod +x ./build/minecraft-clone`
-
-#### Issue: Graphics driver issues
-**Solution:** Update your graphics drivers:
-```bash
-# For NVIDIA
-sudo ubuntu-drivers autoinstall
-
-# For AMD
-sudo apt install mesa-vulkan-drivers mesa-utils
-```
-
-#### Issue: Black screen or rendering problems
+#### Issue: Can't access from another device
 **Solution:** 
-- Verify OpenGL support: `glxinfo | grep "OpenGL version"`
-- Update graphics drivers
-- Try running in software rendering mode (slower): `LIBGL_ALWAYS_SOFTWARE=1 ./build/minecraft-clone`
+1. Check firewall settings:
+```bash
+sudo ufw allow 3000/tcp
+sudo ufw reload
+```
 
-## Running the Game
+2. Verify server is listening on all interfaces (0.0.0.0)
+3. Confirm both devices are on the same network
+4. Get your Ubuntu IP:
+```bash
+hostname -I
+```
 
-### Controls
-(Customize this section based on your actual implementation)
-- **W/A/S/D**: Move forward/left/backward/right
-- **Space**: Jump
-- **Mouse**: Look around
-- **Left Click**: Break block
-- **Right Click**: Place block
-- **ESC**: Pause/Exit
+#### Issue: "npm: command not found"
+**Solution:** Install Node.js and npm:
+```bash
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt install -y nodejs
+```
 
-### Performance Optimization
-For better performance, you can:
-1. Build in Release mode: `cmake -DCMAKE_BUILD_TYPE=Release ..`
-2. Reduce render distance in game settings
-3. Ensure you have proper graphics drivers installed
+#### Issue: "Port 3000 is already in use"
+**Solution:** Either stop the other process or use a different port:
+```bash
+# Find what's using port 3000
+sudo lsof -i :3000
+
+# Use a different port
+PORT=8080 npm start
+```
+
+#### Issue: Game is laggy or slow
+**Solution:** 
+- Close other browser tabs
+- Check browser console for errors (F12)
+- Ensure you have a good GPU
+- Try a different browser (Chrome recommended)
+- Reduce window size
+
+#### Issue: Mouse won't lock / pointer lock not working
+**Solution:** 
+- Click the "Click to Play" button
+- Some browsers require user interaction first
+- Try pressing ESC and clicking again
+- Check browser permissions for pointer lock
+
+#### Issue: Blocks not appearing or rendering issues
+**Solution:**
+- Clear browser cache
+- Hard refresh (Ctrl+Shift+R or Cmd+Shift+R)
+- Check browser console for errors
+- Ensure WebGL is supported: visit `chrome://gpu/`
+
+### Server Management
+
+**Run server in background:**
+```bash
+# Using nohup
+nohup npm start &
+
+# Using screen
+screen -S minecraft
+npm start
+# Press Ctrl+A then D to detach
+# Reattach with: screen -r minecraft
+
+# Using pm2 (recommended for production)
+sudo npm install -g pm2
+pm2 start server.js --name minecraft-clone
+pm2 save
+pm2 startup
+```
+
+**Stop background server:**
+```bash
+# If using pm2
+pm2 stop minecraft-clone
+
+# Find and kill process
+ps aux | grep node
+kill <process-id>
+```
 
 ## Development Workflow
 
-### Making Changes
-1. Edit source files in the `src/` directory
-2. Rebuild the project: `cd build && make`
-3. Run and test: `./minecraft-clone`
+### Making Changes to the Game
 
-### Clean Build
-If you need to start fresh:
+**1. Modify game logic:**
+Edit `public/js/game.js`
+
+**2. Update UI/styling:**
+Edit `public/index.html`
+
+**3. Change server behavior:**
+Edit `server.js`
+
+**4. Test changes:**
 ```bash
-cd build
-rm -rf *
-cmake ..
-make
+# Use nodemon for auto-reload
+npm run dev
 ```
 
-Or simply:
-```bash
-rm -rf build
-mkdir build
-cd build
-cmake ..
-make
+**5. Refresh browser:**
+Hard refresh (Ctrl+Shift+R) to see changes
+
+### Adding New Features
+
+To add block types, modify `public/js/game.js`:
+```javascript
+// Add in generateWorld() or placeBlock() method
+const newMaterial = new THREE.MeshLambertMaterial({ color: 0xFF0000 });
 ```
+
+To change world generation, edit the `generateWorld()` method in `public/js/game.js`
+
+## Advanced Configuration
+
+### Running on a Different Port
+
+Edit `server.js` or use environment variable:
+```bash
+PORT=8080 npm start
+```
+
+### Enabling HTTPS (for remote access)
+
+For secure connections, set up an nginx reverse proxy with SSL:
+```bash
+sudo apt install nginx certbot
+# Configure nginx and obtain SSL certificate
+```
+
+### Network Performance Optimization
+
+For better performance over network:
+1. Use a wired connection instead of WiFi
+2. Ensure good signal strength if using WiFi
+3. Close bandwidth-heavy applications
+4. Consider using a CDN for Three.js library (already configured)
+
+## Technology Stack
+
+- **Frontend**: Three.js (WebGL), HTML5, CSS3, JavaScript
+- **Backend**: Node.js, Express
+- **3D Graphics**: Three.js r128
+- **Server**: Express.js web server
+
+## Browser Compatibility
+
+This game works best on modern browsers with WebGL support:
+- ✅ Chrome/Chromium (recommended)
+- ✅ Firefox
+- ✅ Edge
+- ✅ Safari (macOS/iOS)
+- ✅ Opera
+
+**Minimum Requirements:**
+- WebGL-capable browser
+- Mouse and keyboard
+- Stable internet connection (for CDN resources)
+
+## Future Enhancements
+
+Potential features to add:
+- Multiplayer support with WebSockets
+- More block types and textures
+- Inventory system
+- Day/night cycle
+- Mob spawning
+- Save/load world state
+- Touch controls for mobile devices
+- Improved terrain generation with Perlin noise
 
 ## Gameplay
-In this game, players can explore a procedurally generated world, gather resources, and build structures. The game features a simple user interface and basic controls for movement and interaction.
+Players can explore a procedurally generated voxel world directly in their web browser. Use WASD keys to move around, the mouse to look, left-click to break blocks, and right-click to place new blocks. The game features real-time rendering with Three.js and provides an immersive first-person experience similar to Minecraft.
 
 ## Contributing
 Contributions are welcome! Please feel free to submit a pull request or open an issue for any suggestions or improvements.

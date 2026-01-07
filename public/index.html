@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Clone - Browser Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        #game-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        #game-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        #hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 16px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            z-index: 10;
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        #crosshair {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        #crosshair::before,
+        #crosshair::after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        #crosshair::before {
+            width: 2px;
+            height: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #crosshair::after {
+            width: 20px;
+            height: 2px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        #controls-info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            font-size: 14px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            z-index: 10;
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            text-align: center;
+            z-index: 100;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid white;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+        }
+
+        #start-screen h1 {
+            color: white;
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+        }
+
+        #start-button {
+            padding: 15px 40px;
+            font-size: 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #start-button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="loading">
+            <div>Loading Minecraft Clone...</div>
+            <div class="loading-spinner"></div>
+        </div>
+
+        <div id="start-screen" style="display: none;">
+            <h1>Minecraft Clone</h1>
+            <button id="start-button">Click to Play</button>
+            <div style="color: white; margin-top: 20px; text-align: center;">
+                <p>Click to lock mouse pointer and start playing</p>
+            </div>
+        </div>
+
+        <canvas id="game-canvas"></canvas>
+        
+        <div id="hud">
+            <div>FPS: <span id="fps">0</span></div>
+            <div>Position: <span id="position">0, 0, 0</span></div>
+            <div>Blocks: <span id="blocks">0</span></div>
+        </div>
+
+        <div id="crosshair"></div>
+
+        <div id="controls-info">
+            <strong>Controls:</strong><br>
+            WASD - Move<br>
+            Space - Jump<br>
+            Mouse - Look Around<br>
+            Left Click - Break Block<br>
+            Right Click - Place Block<br>
+            ESC - Unlock Mouse
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>
